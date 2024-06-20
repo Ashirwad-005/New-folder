@@ -1,8 +1,10 @@
 package Sol;
+
 import java.util.*;
 
-public class DroneDelivery{
-	static Scanner scan=new Scanner (System.in);
+public class ClosestPairAlgorithm {
+    static Scanner scan = new Scanner(System.in);
+
     static class Point {
         double x;
         double y;
@@ -12,21 +14,24 @@ public class DroneDelivery{
             this.y = y;
         }
     }
+
     public static List<Point> generateRandomPoints(int numPoints) {
         List<Point> points = new ArrayList<>();
         Random random = new Random();
 
         for (int i = 0; i < numPoints; i++) {
-            double x = random.nextDouble() * 1000; 
+            double x = random.nextDouble() * 1000;
             double y = random.nextDouble() * 1000;
             points.add(new Point(x, y));
         }
 
         return points;
     }
+
     public static double distance(Point p1, Point p2) {
         return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     }
+
     public static double bruteForceClosestPair(List<Point> points) {
         int n = points.size();
         double minDist = Double.POSITIVE_INFINITY;
@@ -42,12 +47,14 @@ public class DroneDelivery{
 
         return minDist;
     }
+
     public static double closestPair(List<Point> points) {
         List<Point> sortedPoints = new ArrayList<>(points);
         Collections.sort(sortedPoints, (p1, p2) -> Double.compare(p1.x, p2.x));
 
         return closestPairHelper(sortedPoints);
     }
+
     private static double closestPairHelper(List<Point> sortedPoints) {
         int n = sortedPoints.size();
         if (n <= 3) {
@@ -84,39 +91,50 @@ public class DroneDelivery{
 
         return minDist;
     }
+
     public static void main(String[] args) {
-    	List<Point> points = null;
-    	System.out.println("Enter the number to generate random points");
-    	int num=scan.nextInt();
-    	System.out.println("Select the option to find the minimum distance for the drone ");
-    	System.out.println("1. To generate random points to find minimum distance");
-    	System.out.println("2. To give user defined points to the dorne to find minimum distnace");
-    	int choice=scan.nextInt();
-    	if(choice==1) {
-    		points = generateRandomPoints(num);
-    	}
-    	else if(choice==2) {
-    	      points =inputstreampoints(num);
-    	}
-    	else {
-    		System.out.println("Invalid input .Please enter number 1 or 2 ");
-    	}
-        long startTime = System.currentTimeMillis();
-        double minDist = closestPair(points);
-        long endTime = System.currentTimeMillis();
-        long totalTime= endTime - startTime;
-        System.out.print("Closest pair: ");
-        System.out.println("Total Distance: " + minDist);
-        System.out.println("Time taken: " + totalTime );
+        List<Point> points = null;
+        System.out.println("Enter the number to generate random points:");
+        int num = scan.nextInt();
+        System.out.println("Select the option to perform action on taking inputs of points");
+        System.out.println("Press 1 for taking input from user");
+        System.out.println("Press 2 for generating random points");
+        int choice=scan.nextInt();
+        if(choice==1) {
+        	points= inputstreampoints(num);
+        }
+        else if(choice==2) {
+        	points = generateRandomPoints(num);
+        }else {
+        	System.out.print("invalid input");
+        }
+        long startTimeBruteForce = System.currentTimeMillis();
+        double minDistBruteForce = bruteForceClosestPair(points);
+        long endTimeBruteForce = System.currentTimeMillis();
+        long totalTimeBruteForce = endTimeBruteForce - startTimeBruteForce;
+
+        long startTimeDivideConquer = System.currentTimeMillis();
+        double minDistDivideConquer = closestPair(points);
+        long endTimeDivideConquer = System.currentTimeMillis();
+        long totalTimeDivideConquer = endTimeDivideConquer - startTimeDivideConquer;
+
+        System.out.println("Brute Force Closest Pair:");
+        System.out.println("Total Distance: " + minDistBruteForce);
+        System.out.println("Time taken: " + totalTimeBruteForce );
+
+        System.out.println();
+
+        System.out.println("Divide and Conquer Closest Pair:");
+        System.out.println("Total Distance: " + minDistDivideConquer);
+        System.out.println("Time taken: " + totalTimeDivideConquer );
     }
-	private static List<Point> inputstreampoints(int num) {
-		List<Point> points = new ArrayList<>();
-		for (int i = 0; i < num; i++) {
+    private static List<Point> inputstreampoints(int num) {
+    	List<Point> points = new ArrayList<>();
+    	for (int i = 0; i < num; i++) {
             double x = scan.nextDouble() ; 
             double y = scan.nextDouble() ;
             points.add(new Point(x, y));
         }
 		return points;
-	}
+    }
 }
-
